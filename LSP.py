@@ -59,5 +59,6 @@ def svd_least_squares():
     print(f"Rank of A: {rank}")
     print(f"Singular values of A: {svals}")
 
+
 if __name__ == "__main__":
     svd_least_squares()
