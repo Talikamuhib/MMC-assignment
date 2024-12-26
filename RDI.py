@@ -55,11 +55,15 @@ for user_idx, movie_idx in zip(*missing_indices):
 
 print("\n")
 
+# Define user and movie names for clarity
+users = ["Alice", "Bob", "Carol"]
+movies = np.array(["Inception (Sci-Fi)", "Titanic (Romance)", "Jaws (Thriller)"])
+
 # Fill in the missing ratings from the reconstructed matrix
 for user_idx, movie_idx in zip(*missing_indices):
     predicted_rating = M_reconstructed[user_idx, movie_idx]
     M_predicted[user_idx, movie_idx] = predicted_rating
-    print(f"Predicted rating for User {user_idx + 1}, Movie {movie_idx + 1}: {predicted_rating:.2f}")
+    print(f"Predicted rating for User {users[user_idx]}, Movie '{movies[movie_idx]}': {predicted_rating:.2f}")
 
 print("\n")
 
@@ -69,10 +73,6 @@ print("\n")
 
 # Step 5: Make Recommendations Based on Predicted Ratings
 # For each user, identify the movie with the highest predicted rating among the missing ones
-
-# Define user and movie names for clarity
-users = ["Alice", "Bob", "Carol"]
-movies = ["Inception (Sci-Fi)", "Titanic (Romance)", "Jaws (Thriller)"]
 
 print("Recommendations:")
 
@@ -87,10 +87,11 @@ for user_idx, user in enumerate(users):
     predicted_ratings = M_predicted[user_idx, unrated_movies_indices]
     
     # Find the movie with the highest predicted rating
-    best_movie_idx = unrated_movies_indices[np.argmax(predicted_ratings)]
-    best_rating = predicted_ratings.max()
+    best_movie_idx_relative = np.argmax(predicted_ratings)
+    best_movie_idx = unrated_movies_indices[best_movie_idx_relative]
+    best_rating = predicted_ratings[best_movie_idx_relative]
     
-    print(f"- {user} has not rated {movies[unrated_movies_indices][0]}.")
+    print(f"- {user} has not rated '{movies[best_movie_idx]}'.")
     print(f"  Predicted rating: {best_rating:.2f}")
     # Optionally, recommend if the rating is above a certain threshold
     # For this example, we'll recommend the movie if predicted rating >= 3
@@ -121,7 +122,7 @@ M_predicted_k = M.copy()
 for user_idx, movie_idx in zip(*missing_indices):
     predicted_rating_k = M_approx_k[user_idx, movie_idx]
     M_predicted_k[user_idx, movie_idx] = predicted_rating_k
-    print(f"Predicted rating (Rank-{k}) for User {user_idx + 1}, Movie {movie_idx + 1}: {predicted_rating_k:.2f}")
+    print(f"Predicted rating (Rank-{k}) for User {users[user_idx]}, Movie '{movies[movie_idx]}': {predicted_rating_k:.2f}")
 
 print("\n")
 
@@ -143,13 +144,13 @@ for user_idx, user in enumerate(users):
     predicted_ratings_k = M_predicted_k[user_idx, unrated_movies_indices]
     
     # Find the movie with the highest predicted rating
-    best_movie_idx_k = unrated_movies_indices[np.argmax(predicted_ratings_k)]
-    best_rating_k = predicted_ratings_k.max()
+    best_movie_idx_k_relative = np.argmax(predicted_ratings_k)
+    best_movie_idx_k = unrated_movies_indices[best_movie_idx_k_relative]
+    best_rating_k = predicted_ratings_k[best_movie_idx_k_relative]
     
-    print(f"- {user} has not rated {movies[unrated_movies_indices][0]}.")
+    print(f"- {user} has not rated '{movies[best_movie_idx_k]}'.")
     print(f"  Predicted rating (Rank-{k}): {best_rating_k:.2f}")
     if best_rating_k >= 3:
         print(f"  Recommendation: Recommend '{movies[best_movie_idx_k]}' to {user}.")
     else:
         print(f"  Recommendation: No strong recommendation for {user} based on predicted ratings.")
-
