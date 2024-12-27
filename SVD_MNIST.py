@@ -20,9 +20,9 @@ def CompressImage(filename):
     # Step 1: Read the Image and Convert to Grayscale
     try:
         # Read the image from the given filename
-        image_rgb = io.imread(filename)
+        image_rgb = io.imread("/workspaces/MMC-assignment/image.png")
     except FileNotFoundError:
-        print(f"Error: The file '{filename}' was not found.")
+        print(f"Error: The file was not found.")
         return
     except Exception as e:
         print(f"Error: An error occurred while reading the file: {e}")
@@ -100,4 +100,4 @@ def CompressImage(filename):
     plt.show()
 
 # Example Usage:
-# CompressImage('path_to_your_image.jpg')
+CompressImage('p.jpg')
