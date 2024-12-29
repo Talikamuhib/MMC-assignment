@@ -1,0 +1,47 @@
+import numpy as np
+
+# Generate synthetic training data for digits 3 and 5
+np.random.seed(0)
+train_3 = np.random.rand(784, 10)  # 10 training images for digit 3
+train_5 = np.random.rand(784, 10)  # 10 training images for digit 5
+
+# Combine data into matrices
+M_3 = train_3
+M_5 = train_5
+
+# Perform SVD for both digits
+U_3, _, _ = np.linalg.svd(M_3, full_matrices=False)
+U_5, _, _ = np.linalg.svd(M_5, full_matrices=False)
+# Generate a test digit vector
+test_digit = np.random.rand(784)
+
+# Compute projections onto digit subspaces
+proj_3 = U_3 @ U_3.T @ test_digit
+proj_5 = U_5 @ U_5.T @ test_digit
+
+# Compute residuals
+residual_3 = np.linalg.norm(test_digit - proj_3)
+residual_5 = np.linalg.norm(test_digit - proj_5)
+
+# Classify based on smallest residual
+if residual_3 < residual_5:
+    print("The test digit is classified as 3")
+else:
+    print("The test digit is classified as 5")
+# Generate multiple test digits and classify
+test_digits = np.random.rand(784, 20)  # 20 test digits
+true_labels = np.array([3] * 10 + [5] * 10)  # True labels
+
+# Classification
+predicted_labels = []
+for i in range(test_digits.shape[1]):
+    q = test_digits[:, i]
+    proj_3 = U_3 @ U_3.T @ q
+    proj_5 = U_5 @ U_5.T @ q
+    res_3 = np.linalg.norm(q - proj_3)
+    res_5 = np.linalg.norm(q - proj_5)
+    predicted_labels.append(3 if res_3 < res_5 else 5)
+
+# Calculate accuracy
+accuracy = np.mean(predicted_labels == true_labels) * 100
+print(f"Classification Accuracy: {accuracy:.2f}%")
