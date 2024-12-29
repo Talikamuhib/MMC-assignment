@@ -101,4 +101,4 @@ def CompressImage(filename):
     plt.show()
 
 # Example Usage:
-CompressImage('image.png')
+CompressImage('/workspaces/MMC-assignment/image.png')
